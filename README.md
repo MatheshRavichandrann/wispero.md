@@ -1,125 +1,118 @@
-# Wispero.MD (Messaging Application)
 
-This is a **Messaging Application** backend built using **Spring Boot**. It supports user authentication with Keycloak, database integration with PostgreSQL, WebSocket communication for real-time messaging, and media file uploads.
+# Whispero API
+
+Whispero API is a backend application for a real-time chat system, supporting text, media messages, and user management. Built using **Spring Boot**, it provides RESTful endpoints for seamless communication between clients.
 
 ## Features
 
-- User authentication and management using Keycloak.
-- Real-time messaging via WebSocket.
-- Media file uploads (images, videos, etc.).
-- Angular frontend support with Nginx deployment.
-- CI/CD pipeline using GitHub Actions.
-- Dockerized deployment for seamless integration.
+- **User Management**
+  - OAuth2 authentication and synchronization with Identity Providers (IDPs).
+  - Retrieve user details and online status.
+  
+- **Messaging**
+  - Send text and media messages (image, audio, video).
+  - Mark messages as seen.
+  - Fetch chat history for a given chat ID.
+  
+- **Media Upload**
+  - Support for uploading media files in chat.
+
+- **Database**
+  - Built-in persistence using JPA and PostgreSQL for relational data.
+
+- **Audit Support**
+  - Tracks message creation time and state transitions.
 
 ## Technologies Used
 
-### Backend
-- Java 21
-- Spring Boot
-- WebSocket
-- PostgreSQL
-- Keycloak
-
-### Frontend
-- HTML, CSS
-- Angular
-- Nginx
-
-### DevOps
-- Docker
-- GitHub Actions
-- Render (for deployment)
+- **Backend Framework:** Spring Boot
+- **Authentication:** Spring Security with OAuth2
+- **Database:** PostgreSQL with JPA
+- **Media Handling:** Multipart file upload
+- **Build Tool:** Maven
+- **Testing:** JUnit, Mockito
+- **Dependencies:** Lombok, ModelMapper, Jakarta Persistence, and more
 
 ## Prerequisites
 
-- **Java 21**
-- **Maven**
-- **PostgreSQL**
-- **Keycloak**
-- **Docker**
-- **Node.js** (for Angular frontend)
+- **Java 21** or later
+- **Maven** (version 3.6 or higher)
+- **PostgreSQL** database setup
+- **Keycloak** for authentication (or a similar OAuth2 provider)
 
-## Setup Instructions
+## Getting Started
 
-### 1. Clone the Repository
-```bash
-git clone <repository-url>
-cd <repository-directory>
-```
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/your-username/whispero-api.git
+   cd whispero-api
+   ```
 
-### 2. Configure the Application
+2. **Configure the Application**
+   - Update the `application.yml` or `application.properties` file with your database and OAuth2 configurations:
+     ```yaml
+     spring:
+       datasource:
+         url: jdbc:postgresql://localhost:5432/whispero
+         username: your-username
+         password: your-password
+       jpa:
+         hibernate:
+           ddl-auto: update
+     ```
 
-#### Keycloak
-- Set up Keycloak with your realm, clients, and users.
-- Update the `application.yml` with Keycloak configurations.
+3. **Build and Run**
+   - Build the project using Maven:
+     ```bash
+     mvn clean install
+     ```
+   - Start the application:
+     ```bash
+     mvn spring-boot:run
+     ```
 
-#### PostgreSQL
-- Create a PostgreSQL database.
-- Update the `application.yml` with the database URL, username, and password.
+4. **API Endpoints**
+   - Access the API at `http://localhost:8080/api/v1`.
+   - Examples:
+     - `POST /messages` - Send a message.
+     - `POST /messages/upload-media` - Upload media.
+     - `PATCH /messages` - Mark messages as seen.
+     - `GET /users` - Fetch all users.
 
-```yaml
-spring:
-  datasource:
-    url: jdbc:postgresql://<db_host>:<db_port>/<db_name>
-    username: <db_username>
-    password: <db_password>
-```
+## Example Usage
 
-#### WebSocket
-- Ensure the WebSocket endpoint is correctly configured in the backend and aligns with the frontend setup.
+### Sending a Message
+- **Endpoint:** `POST /api/v1/messages`
+- **Request Body:**
+  ```json
+  {
+    "content": "Hello!",
+    "senderId": "user1",
+    "receiverId": "user2",
+    "type": "TEXT",
+    "chatId": "12345"
+  }
+  ```
 
-#### Media Uploads
-- Update the file storage location in the backend, if necessary.
+### Uploading Media
+- **Endpoint:** `POST /api/v1/messages/upload-media`
+- **Form Data:**
+  - `chat-id`: Chat ID
+  - `file`: Media file (image, audio, or video)
 
-### 3. Build and Run the Backend
+## Future Enhancements
 
-#### Using Maven
-```bash
-mvn clean install
-java -jar target/<jar-file>.jar
-```
+- **Notifications**: Implement real-time push notifications for new messages and updates.
+- **Attachments**: Add support for document and file attachments.
+- **CI/CD Pipeline**: Integrate GitHub Actions for continuous deployment.
 
-#### Using Docker
-Build the Docker image:
-```bash
-docker build -t messaging-app-backend .
-```
-Run the container:
-```bash
-docker run -p 8080:8080 messaging-app-backend
-```
+## Contributing
 
-### 4. Set Up the Frontend
-- Navigate to the frontend project directory.
-- Install dependencies and build the project:
-```bash
-npm install
-ng build --prod
-```
-- Deploy the Angular build with Nginx.
-
-### 5. Deployment
-#### Using Render
-- Push your code to GitHub.
-- Configure the Render service for automatic deployment.
-
-#### CI/CD with GitHub Actions
-- Set up the GitHub Actions workflow file in `.github/workflows/ci-cd.yml` for automatic testing and deployment.
-
-## API Endpoints
-
-| Endpoint                | Method | Description                |
-|-------------------------|--------|----------------------------|
-| `/auth/login`           | POST   | Authenticate a user        |
-| `/auth/register`        | POST   | Register a new user        |
-| `/messages`             | GET    | Fetch user messages        |
-| `/messages/send`        | POST   | Send a new message         |
-| `/media/upload`         | POST   | Upload media files         |
-
-## Contribution
-
-Feel free to submit issues or create pull requests for enhancements and bug fixes. Follow the project's code of conduct when contributing.
+Contributions are welcome! Feel free to open issues or submit pull requests. For major changes, please open an issue first to discuss what you'd like to change.
 
 ## License
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+This project is licensed under the MIT License. See the `LICENSE` file for more information.
+```
+
+Replace placeholders like `your-username` and database credentials with your actual details. Add or modify sections as needed based on your specific project features and setup.
