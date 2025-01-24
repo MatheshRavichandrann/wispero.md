@@ -1,118 +1,176 @@
-
 # Whispero API
 
-Whispero API is a backend application for a real-time chat system, supporting text, media messages, and user management. Built using **Spring Boot**, it provides RESTful endpoints for seamless communication between clients.
+A scalable backend application for a real-time chat system, enabling seamless communication with user management, text, and media messaging.
+
+---
+
+## Table of Contents
+
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Configuration](#configuration)
+  - [Build and Run](#build-and-run)
+- [API Endpoints](#api-endpoints)
+  - [Message APIs](#message-apis)
+  - [User APIs](#user-apis)
+- [Example Usage](#example-usage)
+- [Future Enhancements](#future-enhancements)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
 
 ## Features
 
 - **User Management**
-  - OAuth2 authentication and synchronization with Identity Providers (IDPs).
-  - Retrieve user details and online status.
-  
+  - OAuth2 authentication and synchronization with IDPs.
+  - Fetch online statuses and user details.
+
 - **Messaging**
-  - Send text and media messages (image, audio, video).
+  - Send and retrieve text/media messages.
   - Mark messages as seen.
-  - Fetch chat history for a given chat ID.
-  
+
 - **Media Upload**
-  - Support for uploading media files in chat.
+  - Supports file uploads (image, audio, video).
 
 - **Database**
-  - Built-in persistence using JPA and PostgreSQL for relational data.
+  - Robust persistence with PostgreSQL.
 
 - **Audit Support**
-  - Tracks message creation time and state transitions.
+  - Tracks message states and timestamps.
+
+---
 
 ## Technologies Used
 
 - **Backend Framework:** Spring Boot
-- **Authentication:** Spring Security with OAuth2
 - **Database:** PostgreSQL with JPA
+- **Authentication:** Keycloak and OAuth2
 - **Media Handling:** Multipart file upload
-- **Build Tool:** Maven
 - **Testing:** JUnit, Mockito
-- **Dependencies:** Lombok, ModelMapper, Jakarta Persistence, and more
+- **Build Tool:** Maven
 
-## Prerequisites
-
-- **Java 21** or later
-- **Maven** (version 3.6 or higher)
-- **PostgreSQL** database setup
-- **Keycloak** for authentication (or a similar OAuth2 provider)
+---
 
 ## Getting Started
 
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/your-username/whispero-api.git
-   cd whispero-api
+### Prerequisites
+
+Ensure the following tools are installed:
+
+- Java 21+
+- Maven 3.6+
+- PostgreSQL
+- Keycloak (or a similar OAuth2 provider)
+
+---
+
+### Configuration
+
+1. Update the database and OAuth2 credentials in `src/main/resources/application.yml`:
+
+   ```yaml
+   spring:
+     datasource:
+       url: jdbc:postgresql://localhost:5432/whispero
+       username: your-username
+       password: your-password
+     jpa:
+       hibernate:
+         ddl-auto: update
    ```
 
-2. **Configure the Application**
-   - Update the `application.yml` or `application.properties` file with your database and OAuth2 configurations:
-     ```yaml
-     spring:
-       datasource:
-         url: jdbc:postgresql://localhost:5432/whispero
-         username: your-username
-         password: your-password
-       jpa:
-         hibernate:
-           ddl-auto: update
-     ```
+2. Set up Keycloak:
+   - Configure a realm and a client for authentication.
+   - Update the Keycloak URL and credentials in `application.yml`.
 
-3. **Build and Run**
-   - Build the project using Maven:
-     ```bash
-     mvn clean install
-     ```
-   - Start the application:
-     ```bash
-     mvn spring-boot:run
-     ```
+---
 
-4. **API Endpoints**
-   - Access the API at `http://localhost:8080/api/v1`.
-   - Examples:
-     - `POST /messages` - Send a message.
-     - `POST /messages/upload-media` - Upload media.
-     - `PATCH /messages` - Mark messages as seen.
-     - `GET /users` - Fetch all users.
+### Build and Run
+
+1. Build the project:
+   ```bash
+   mvn clean install
+   ```
+
+2. Run the application:
+   ```bash
+   mvn spring-boot:run
+   ```
+
+---
+
+## API Endpoints
+
+### Message APIs
+
+| Endpoint                       | Method | Description                   |
+|--------------------------------|--------|-------------------------------|
+| `/api/v1/messages`             | POST   | Send a message                |
+| `/api/v1/messages/upload-media`| POST   | Upload media                  |
+| `/api/v1/messages/{id}`        | PATCH  | Mark messages as seen         |
+
+### User APIs
+
+| Endpoint          | Method | Description              |
+|-------------------|--------|--------------------------|
+| `/api/v1/users`   | GET    | Get user details         |
+| `/api/v1/users/{id}`| GET   | Fetch specific user info |
+
+---
 
 ## Example Usage
 
-### Sending a Message
-- **Endpoint:** `POST /api/v1/messages`
-- **Request Body:**
-  ```json
-  {
-    "content": "Hello!",
-    "senderId": "user1",
-    "receiverId": "user2",
-    "type": "TEXT",
-    "chatId": "12345"
-  }
-  ```
+<details>
+<summary>Sending a Message</summary>
 
-### Uploading Media
-- **Endpoint:** `POST /api/v1/messages/upload-media`
-- **Form Data:**
-  - `chat-id`: Chat ID
-  - `file`: Media file (image, audio, or video)
+**Endpoint:** `POST /api/v1/messages`  
+**Request Body:**
+
+```json
+{
+  "content": "Hello!",
+  "senderId": "user1",
+  "receiverId": "user2",
+  "type": "TEXT",
+  "chatId": "12345"
+}
+```
+
+</details>
+
+<details>
+<summary>Uploading Media</summary>
+
+**Endpoint:** `POST /api/v1/messages/upload-media`  
+**Form Data:**
+- `chat-id`: Chat ID
+- `file`: Media file (image, audio, or video)
+
+</details>
+
+---
 
 ## Future Enhancements
 
-- **Notifications**: Implement real-time push notifications for new messages and updates.
-- **Attachments**: Add support for document and file attachments.
-- **CI/CD Pipeline**: Integrate GitHub Actions for continuous deployment.
+- Push notifications for real-time updates.
+- Document and file attachments.
+- Implement a CI/CD pipeline using GitHub Actions.
+
+---
 
 ## Contributing
 
-Contributions are welcome! Feel free to open issues or submit pull requests. For major changes, please open an issue first to discuss what you'd like to change.
+Contributions are welcome! Please:
+- Fork the repo.
+- Make your changes in a feature branch.
+- Submit a pull request.
+
+---
 
 ## License
 
-This project is licensed under the MIT License. See the `LICENSE` file for more information.
+This project is licensed under the [MIT License](LICENSE).
 ```
-
-Replace placeholders like `your-username` and database credentials with your actual details. Add or modify sections as needed based on your specific project features and setup.
