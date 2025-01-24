@@ -1,4 +1,4 @@
-# Messaging Application
+# Wispero.MD (Messaging Application)
 
 This is a **Messaging Application** backend built using **Spring Boot**. It supports user authentication with Keycloak, database integration with PostgreSQL, WebSocket communication for real-time messaging, and media file uploads.
 
