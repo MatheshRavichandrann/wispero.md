@@ -1,0 +1,37 @@
+services:
+  postgres:
+    container_name: postgres-db
+    image: postgres
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      PGDATA: /var/lib/postgresql/data
+      POSTGRES_DB: whisper_md  # Changed from whisper.md
+    volumes:
+      - postgres:/data/postgres  # Fixed volume mapping
+    ports:
+      - 5432:5432
+    networks:
+      - whisper_md  # Changed from whisper.md
+    restart: unless-stopped
+
+  keycloak:
+    container_name: keycloak-wsmd
+    image: quay.io/keycloak/keycloak:26.0.0
+    ports:
+      - 9090:8080
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin  # Changed from KEYCLOAK_ADMIN
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin  # Changed from KEYCLOAK_PASSWORD
+    networks:
+      - whisper_md
+    command:
+      - "start-dev"
+
+networks:
+  whisper_md:  # Changed from whisper.md
+    driver: bridge
+
+volumes:
+  postgres:
+    driver: local
